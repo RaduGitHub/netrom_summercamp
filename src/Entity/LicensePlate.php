@@ -20,6 +20,7 @@ class LicensePlate
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="license_plates")
      * @ORM\JoinColumn(nullable=false)
+     * @ORM\Column (type="string", length=10)
      */
     private $license_plate;
 
@@ -27,11 +28,6 @@ class LicensePlate
      * @ORM\OneToOne(targetEntity=User::class, inversedBy="user_id", cascade={"persist", "remove"})
      */
     private $user_id;
-
-    public function getId(): ?int
-    {
-        return $this->id;
-    }
 
     public function getLicensePlate(): ?User
     {

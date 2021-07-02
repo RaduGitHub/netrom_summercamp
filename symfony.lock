@@ -103,6 +103,18 @@
     "psr/log": {
         "version": "1.1.4"
     },
+    "sensio/framework-extra-bundle": {
+        "version": "5.2",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "5.2",
+            "ref": "fb7e19da7f013d0d422fa9bce16f5c510e27609b"
+        },
+        "files": [
+            "./config/packages/sensio_framework_extra.yaml"
+        ]
+    },
     "symfony/cache": {
         "version": "v5.3.0"
     },
@@ -163,6 +175,9 @@
             "./.env"
         ]
     },
+    "symfony/form": {
+        "version": "v5.3.3"
+    },
     "symfony/framework-bundle": {
         "version": "5.3",
         "recipe": {
@@ -200,6 +215,9 @@
             "ref": "fadbfe33303a76e25cb63401050439aa9b1a9c7f"
         }
     },
+    "symfony/options-resolver": {
+        "version": "v5.3.0"
+    },
     "symfony/orm-pack": {
         "version": "v2.1.0"
     },
@@ -207,6 +225,9 @@
         "version": "v5.3.3"
     },
     "symfony/polyfill-intl-grapheme": {
+        "version": "v1.23.0"
+    },
+    "symfony/polyfill-intl-icu": {
         "version": "v1.23.0"
     },
     "symfony/polyfill-intl-normalizer": {
@@ -303,6 +324,19 @@
     },
     "symfony/twig-pack": {
         "version": "v1.0.1"
+    },
+    "symfony/validator": {
+        "version": "4.3",
+        "recipe": {
+            "repo": "github.com/symfony/recipes",
+            "branch": "master",
+            "version": "4.3",
+            "ref": "d902da3e4952f18d3bf05aab29512eb61cabd869"
+        },
+        "files": [
+            "./config/packages/test/validator.yaml",
+            "./config/packages/validator.yaml"
+        ]
     },
     "symfony/var-dumper": {
         "version": "v5.3.2"
