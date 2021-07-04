@@ -1,6 +1,6 @@
 security:
     encoders:
-        App\Entity\AppUser:
+        App\Entity\User:
             algorithm: auto
 
     # https://symfony.com/doc/current/security/experimental_authenticators.html
@@ -10,7 +10,7 @@ security:
         # used to reload user from session & other features (e.g. switch_user)
         app_user_provider:
             entity:
-                class: App\Entity\AppUser
+                class: App\Entity\User
                 property: email
     firewalls:
         dev:

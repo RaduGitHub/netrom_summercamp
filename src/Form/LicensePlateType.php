@@ -2,26 +2,25 @@
 
 namespace App\Form;
 
-use App\Entity\AppUser;
+use App\Entity\LicensePlate;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class AppUserType extends AbstractType
+class LicensePlateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('email')
-            ->add('roles')
-            ->add('password')
+            ->add('license_plate')
+            ->add('user_id')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => AppUser::class,
+            'data_class' => LicensePlate::class,
         ]);
     }
 }
