@@ -15,38 +15,45 @@ class LicensePlate
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=User::class, inversedBy="license_plates")
      * @ORM\JoinColumn(nullable=false)
      * @ORM\Column (type="string", length=10)
      */
-    private $license_plate;
+    private string $license_plate;
 
     /**
-     * @ORM\OneToOne(targetEntity=User::class, inversedBy="user_id", cascade={"persist", "remove"})
+     * @ORM\ManyToOne(targetEntity=User::class)
+     * @ORM\JoinColumn(nullable=true)
+     * @ORM\Column(type="integer")
      */
-    private $user_id;
+    private int $user_id;
 
-    public function getLicensePlate(): ?User
+    public function getLicensePlate(): string
     {
         return $this->license_plate;
     }
 
-    public function setLicensePlate(?User $license_plate): self
+    public function setLicensePlate(string $license_plate): self
     {
         $this->license_plate = $license_plate;
 
         return $this;
     }
 
-    public function getUserId(): ?User
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getUserId(): int
     {
         return $this->user_id;
     }
 
-    public function setUserId(?User $user_id): self
+    public function setUserId(int $user_id): self
     {
         $this->user_id = $user_id;
 

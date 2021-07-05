@@ -39,11 +39,12 @@ class User implements UserInterface
      */
     private $licensePlates;
 
-    private $roles;
+    private string $roles;
 
     public function __construct()
     {
         $this->licensePlates = new ArrayCollection();
+        $this->roles = "";
     }
 
     public function getId(): ?int
@@ -105,9 +106,27 @@ class User implements UserInterface
         return $this;
     }
 
+    public function setRole(string $role = "ROLE_USER"){
+        //dd($roles)
+        //$this->roles = $role;
+    }
+
     public function getRoles()
     {
-        return ["user"];
+        //$roles = $this->roles->toArray();
+        // guarantee every user at least has ROLE_USER
+        //$roles[] = 'ROLE_USER';
+//        dd($roles);
+
+        return ["ROLE_USER"];
+    }
+
+    public function __toString(): string
+    {
+        // to show the name of the Category in the select
+//        return $this->name;
+//         to show the id of the Category in the select
+         return $this->id;
     }
 
     public function getSalt()

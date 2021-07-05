@@ -36,10 +36,11 @@ class UserController extends AbstractController
                 $user,
                 $user->getPassword()
             ));
+            //$user->setRole();
             $entityManager->persist($user);
             $entityManager->flush();
 
-            return $this->redirectToRoute('user_index');
+            return $this->redirectToRoute('home');
         }
 
         return $this->render('user/register.html.twig', [

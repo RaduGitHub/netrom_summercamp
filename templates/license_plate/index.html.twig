@@ -15,6 +15,7 @@
         </thead>
         <tbody>
         {% for license_plate in license_plates %}
+            {% if license_plate.userId == app.user.id %}
             <tr>
                 <td>{{ license_plate.id }}</td>
                 <td>{{ license_plate.licensePlate }}</td>
@@ -23,6 +24,7 @@
                     <a href="{{ path('license_plate_edit', {'id': license_plate.id}) }}">edit</a>
                 </td>
             </tr>
+            {% endif %}
         {% else %}
             <tr>
                 <td colspan="3">no records found</td>

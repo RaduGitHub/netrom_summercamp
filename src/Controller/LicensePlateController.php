@@ -3,16 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\LicensePlate;
+use App\Entity\User;
 use App\Form\LicensePlateType;
 use App\Repository\LicensePlateRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Core\Security;
 
 #[Route('/license/plate')]
 class LicensePlateController extends AbstractController
 {
+
     #[Route('/', name: 'license_plate_index', methods: ['GET'])]
     public function index(LicensePlateRepository $licensePlateRepository): Response
     {
@@ -22,14 +25,16 @@ class LicensePlateController extends AbstractController
     }
 
     #[Route('/new', name: 'license_plate_new', methods: ['GET', 'POST'])]
-    public function new(Request $request): Response
+    public function new(Request $request, Security $security): Response
     {
+
         $licensePlate = new LicensePlate();
         $form = $this->createForm(LicensePlateType::class, $licensePlate);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+            $licensePlate->setUserId($this->getUser()->getId());
             $entityManager->persist($licensePlate);
             $entityManager->flush();
 

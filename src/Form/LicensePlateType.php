@@ -13,7 +13,7 @@ class LicensePlateType extends AbstractType
     {
         $builder
             ->add('license_plate')
-            ->add('user_id')
+//            ->add('user_id')
         ;
     }
 
