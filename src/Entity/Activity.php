@@ -44,8 +44,8 @@ class Activity
     {
         return $this->blocker;
     }
-
     /**
+
      * @param string $blocker
      */
     public function setBlocker(string $blocker): Activity
@@ -87,5 +87,4 @@ class Activity
         $this->status = $status;
         return $this;
     }
-
 }
