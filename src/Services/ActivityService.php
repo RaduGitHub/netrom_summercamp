@@ -4,15 +4,18 @@
 namespace App\Services;
 
 use App\Entity\Activity;
+use App\Entity\LicensePlate;
 use App\Repository\ActivityRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 
-class ActivitiesService
+class ActivityService
 {
     /**
      * @var ActivityRepository
      */
     protected $activityRepo;
+    protected $licensePlateRepo;
     private EntityManagerInterface $em;
 
     /**
@@ -22,6 +25,7 @@ class ActivitiesService
     {
         $this->em = $em;
         $this->activityRepo = $em->getRepository(Activity::class);
+        $this->licensePlateRepo = $em->getRepository(LicensePlate::class);
     }
 
     public function addBlock(string $licensePlateBlockee, string $licensePlateBlocker)
@@ -48,7 +52,7 @@ class ActivitiesService
     /**
      * @param string $licensePlate
      * @return string|null
-     * @throws \Doctrine\ORM\NonUniqueResultException
+     * @throws NonUniqueResultException
      */
     public function whoBlockedMe(string $licensePlate): ?string
     {
@@ -59,4 +63,29 @@ class ActivitiesService
         }
         return '';
     }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function checkLicensePlate(string $lp, int $uid)
+    {
+        $lp = $this->licensePlateRepo->checkLicensePlate($lp, $uid);
+
+        if($lp instanceof LicensePlate)
+        {
+            //return 'exists';
+        }
+        else
+        {
+            $this->licensePlateRepo->addLicensePlate($lp, $uid);
+            //return 'created';
+        }
+    }
+
+    // TO DO LATER ---- DROPDOWN RETRIEVE DATABASE
+//    public function getLicensePlates(int $userId): ?array
+//    {
+//        $licensePlates = $this->licensePlateRepo->findByUserId($userId);
+//
+//    }
 }

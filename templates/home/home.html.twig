@@ -5,11 +5,12 @@
 {% block body %}
     <h1>Main page</h1>
     {% if is_granted('ROLE_USER') %}
-    <a href="{{ path('app_logout') }}">Logout</a>
-    <a href="{{ path('license_plate_index') }}">View License Plates</a>
-    <a href="{{ path('license_plate_new') }}">Add License Plates</a>
+        <a href="{{ path('app_logout') }}">Logout</a>
+        <a href="{{ path('license_plate_index') }}">View License Plates</a>
+        <a href="{{ path('license_plate_new') }}">Add License Plates</a>
+        <a href="{{ path('iblocked') }}"> I blocked someone! </a>
     {% else %}
-    <a href="{{ path('app_login') }}">Login</a>
-    <a href="{{ path('user_new') }}">Create Account</a>
+        <a href="{{ path('app_login') }}">Login</a>
+        <a href="{{ path('user_new') }}">Create Account</a>
     {% endif %}
 {% endblock %}
