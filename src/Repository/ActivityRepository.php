@@ -19,27 +19,45 @@ class ActivityRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function findByBlockee($value): array
+    public function findByBlockee($value): ?string
     {
 
-        return $this->createQueryBuilder('1')
+        $bl =  $this->createQueryBuilder('1')
             ->andWhere('1.blockee = :val' )
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();
+
+        if($bl == null)
+        {
+            return 'exist';
+        }
+        else
+        {
+            return 'dontex';
+        }
     }
 
     /**
      * @throws NonUniqueResultException
      */
-    public function findByBlocker($value): array
+    public function findByBlocker($value): ?string
     {
 
-        return $this->createQueryBuilder('1')
+        $bl = $this->createQueryBuilder('1')
             ->andWhere('1.blocker = :val' )
             ->setParameter('val', $value)
             ->getQuery()
             ->getOneOrNullResult();
+
+        if($bl == null)
+        {
+            return 'exist';
+        }
+        else
+        {
+            return 'dontex';
+        }
     }
 
     public function addActivityBlocker(string $licensePlateBlockee, string $licensePlateBlocker){

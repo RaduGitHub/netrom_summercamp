@@ -23,6 +23,14 @@ class LicensePlateRepository extends ServiceEntityRepository
         parent::__construct($registry, LicensePlate::class);
     }
 
+    public function findAllForUser(int $uid): array
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.user_id = :var')
+            ->setParameter('var', $uid)
+            ->getQuery()
+            ->getArrayResult();
+    }
     /**
      * @throws NonUniqueResultException
      */
@@ -37,6 +45,8 @@ class LicensePlateRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+//    public function updateLP()
 
     // TO DO ----- Create query to insert
     public function addLPUser(string $lp, int $uid)

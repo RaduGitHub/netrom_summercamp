@@ -48,7 +48,7 @@ class LicensePlate
         return $this->id;
     }
 
-    public function getUserId(): int
+    public function getUserId(): ?int
     {
         return $this->user_id;
     }

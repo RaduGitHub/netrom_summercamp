@@ -6,6 +6,8 @@ use App\Entity\LicensePlate;
 use App\Entity\User;
 use App\Form\LicensePlateType;
 use App\Repository\LicensePlateRepository;
+use App\Services\ActivityService;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -20,12 +22,15 @@ class LicensePlateController extends AbstractController
     public function index(LicensePlateRepository $licensePlateRepository): Response
     {
         return $this->render('license_plate/index.html.twig', [
-            'license_plates' => $licensePlateRepository->findAll(),
+            'license_plates' => $licensePlateRepository->findAllForUser($this->getUser()->getId()),
         ]);
     }
 
+    /**
+     * @throws NonUniqueResultException
+     */
     #[Route('/new', name: 'license_plate_new', methods: ['GET', 'POST'])]
-    public function new(Request $request, Security $security): Response
+    public function new(Request $request, Security $security, ActivityService $as, LicensePlateRepository $lpr): ?Response
     {
 
         $licensePlate = new LicensePlate();
@@ -34,11 +39,28 @@ class LicensePlateController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $entityManager = $this->getDoctrine()->getManager();
+//            $exAct = $as->checkBlockBlockee($licensePlate->getLicensePlate());
+//            if($exAct == 'blocker')
+//            {
+//                //TODO
+//                $lpr->updateLP($this->getUser()->getId());
+                // MAILER
+//                $this->addFlash("notice", "You blocked someone");
+//            }
+//            elseif($exAct == 'blockee')
+//            {
+//                //TODO
+//
+//            }
+//            else
+//            {
+            $this->addFlash("danger", "Plate added");
+//            }
             $licensePlate->setUserId($this->getUser()->getId());
             $entityManager->persist($licensePlate);
             $entityManager->flush();
 
-            return $this->redirectToRoute('license_plate_index');
+            //return $this->redirectToRoute('home');
         }
 
         return $this->render('license_plate/new.html.twig', [

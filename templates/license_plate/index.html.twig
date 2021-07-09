@@ -3,6 +3,8 @@
 {% block title %}LicensePlate index{% endblock %}
 
 {% block body %}
+    {{ parent() }}
+
     <h1>LicensePlate index</h1>
 
     <table class="table">
@@ -15,16 +17,16 @@
         </thead>
         <tbody>
         {% for license_plate in license_plates %}
-            {% if license_plate.userId == app.user.id %}
+{#            {% if license_plate.userId == app.user.id  %}#}
             <tr>
                 <td>{{ license_plate.id }}</td>
-                <td>{{ license_plate.licensePlate }}</td>
+                <td>{{ license_plate.license_plate }}</td>
                 <td>
                     <a href="{{ path('license_plate_show', {'id': license_plate.id}) }}">show</a>
                     <a href="{{ path('license_plate_edit', {'id': license_plate.id}) }}">edit</a>
                 </td>
             </tr>
-            {% endif %}
+{#            {% endif %}#}
         {% else %}
             <tr>
                 <td colspan="3">no records found</td>

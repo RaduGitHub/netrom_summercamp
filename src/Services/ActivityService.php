@@ -82,6 +82,28 @@ class ActivityService
 //        }
 //    }
 
+    public function checkBlockBlockee(string $lp): ?string
+    {
+        $blockee = $this->activityRepo->findByBlockee($lp);
+        $blocker = $this->activityRepo->findByBlocker($lp);
+
+        if($blockee == null and $blocker == null)
+        {
+            //nothing
+            return null;
+        }
+        elseif ($blockee == 'exist')
+        {
+            //send mail
+            return 'blockee';
+        }
+        elseif ($blocker == 'exist')
+        {
+            //send mail
+            return 'blocker';
+        }
+    }
+
     public function checkLicensePlate(string $lp, int $uid = null): ?string
     {
         if($uid == null)
