@@ -12,15 +12,15 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Routing\Annotation\Route;
 
 
-class ActivityType extends AbstractType
+class IBlockedActivityType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
 //            ->add('Email')
 //            ->add('Password')
-            ->add('Blockee')
             ->add('Blocker')
+            ->add('Blockee')
         ;
     }
 

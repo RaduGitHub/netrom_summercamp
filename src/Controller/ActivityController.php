@@ -9,7 +9,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use App\Entity\Activity;
-use App\Form\ActivityType;
+use App\Form\IBlockedActivityType;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/activity')]
@@ -32,7 +32,7 @@ class ActivityController extends AbstractController
     public function new(Request $request): Response
     {
         $activity = new Activity();
-        $form = $this->createForm(ActivityType::class, $activity);
+        $form = $this->createForm(IBlockedActivityType::class, $activity);
         $form->handleRequest($request);
 
         if($form->isSubmitted() && $form->isValid())

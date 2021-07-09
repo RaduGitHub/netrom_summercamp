@@ -67,20 +67,60 @@ class ActivityService
     /**
      * @throws NonUniqueResultException
      */
-    public function checkLicensePlate(string $lp, int $uid)
-    {
-        $lp = $this->licensePlateRepo->checkLicensePlate($lp, $uid);
+//    public function checkBlockeeLP(string $lp, int $uid): ?string
+//    {
+//        $licensePlate = $this->licensePlateRepo->checkLP($lp, $uid);
+//
+//        if($licensePlate != null)
+//        {
+//            return 'exists';
+//        }
+//        else
+//        {
+////            $this->licensePlateRepo->addLPUser($lp, $uid);
+//            return 'create';
+//        }
+//    }
 
-        if($lp instanceof LicensePlate)
+    public function checkLicensePlate(string $lp, int $uid = null): ?string
+    {
+        if($uid == null)
         {
-            //return 'exists';
+            $licensePlate = $this->licensePlateRepo->LPExist($lp);
         }
         else
         {
-            $this->licensePlateRepo->addLicensePlate($lp, $uid);
-            //return 'created';
+            $licensePlate = $this->licensePlateRepo->checkLP($lp, $uid);
+        }
+
+        if($licensePlate != null)
+        {
+            return 'exist';
+        }
+        else
+        {
+            return 'create';
         }
     }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+//    public function checkBlockerLP(string $lp)
+//    {
+//        $licensePlate = $this->licensePlateRepo->LPExist($lp);
+//
+//        if($exist instanceof LicensePlate)
+//        {
+//            //continue
+//            return 'exists';
+//        }
+//        else
+//        {
+////            $this->licensePlateRepo->addLPNoUser($lp);
+//            return 'create';
+//        }
+//    }
 
     // TO DO LATER ---- DROPDOWN RETRIEVE DATABASE
 //    public function getLicensePlates(int $userId): ?array

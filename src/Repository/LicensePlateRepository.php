@@ -8,6 +8,7 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\ORM\Query\Parameter;
 use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\DBAL\Query\QueryBuilder;
 
 /**
  * @method LicensePlate|null find($id, $lockMode = null, $lockVersion = null)
@@ -25,11 +26,11 @@ class LicensePlateRepository extends ServiceEntityRepository
     /**
      * @throws NonUniqueResultException
      */
-    public function checkLicensePlate(string $lp, int $uid)
+    public function checkLP(string $lp, int $uid)
     {
         return $this->createQueryBuilder('l')
             ->andWhere('l.license_plate = :val1 AND l.user_id = :val2')
-            ->setParameters(array([
+            ->setParameters(new ArrayCollection([
                 new Parameter('val1', $lp),
                 new Parameter('val2', $uid),
             ]))
@@ -38,13 +39,46 @@ class LicensePlateRepository extends ServiceEntityRepository
     }
 
     // TO DO ----- Create query to insert
-    public function addLicensePlate(string $lp, int $uid)
+    public function addLPUser(string $lp, int $uid)
+    {
+//        $licensePlate = new LicensePlate();
+//        $licensePlate->setLicensePlate($lp);
+//        $licensePlate->setUserId($uid);
+//        $entityManager = $this->getDoctrine()->getManager();
+//        $entityManager->persist($licensePlate);
+//        $entityManager->flush();
+
+        $this->createQueryBuilder('l')
+            ->insert('license_plate')
+            ->values(
+                array(
+                    'license_plate' => '?',
+                    'user_id' => '?'
+                )
+            )
+            ->setParameter(0, $lp)
+            ->setParameter(1, $uid);
+    }
+
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function LPExist(string $lp)
+    {
+        return $this->createQueryBuilder('l')
+            ->andWhere('l.license_plate = :val1')
+            ->setParameter('val1', $lp)
+            ->getQuery()
+            ->getArrayResult();
+    }
+
+    // TO DO ------- Create query to insert
+    public function addLPNoUser(string $lp)
     {
         $licensePlate = new LicensePlate();
         $licensePlate->setLicensePlate($lp);
-        $licensePlate->setUserId($uid);
+//        $licensePlate->setUserId(null);
         $entityManager = $this->getDoctrine()->getManager();
-//        $licensePlate->setUserId($this->getUser()->getId());
         $entityManager->persist($licensePlate);
         $entityManager->flush();
     }
