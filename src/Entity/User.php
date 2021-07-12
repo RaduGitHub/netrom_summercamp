@@ -41,6 +41,11 @@ class User implements UserInterface
 
     private string $roles;
 
+    //verified???
+    //
+    //
+    //
+
     public function __construct()
     {
         $this->licensePlates = new ArrayCollection();
@@ -116,7 +121,7 @@ class User implements UserInterface
         //$roles = $this->roles->toArray();
         // guarantee every user at least has ROLE_USER
         //$roles[] = 'ROLE_USER';
-//        dd($roles);
+//      dd($roles);
 
         return ["ROLE_USER"];
     }

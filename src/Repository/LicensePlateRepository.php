@@ -31,6 +31,16 @@ class LicensePlateRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    public function findByLP($value)
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.name like :query')
+            ->setParameter('query', "%". $value ."%")
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * @throws NonUniqueResultException
      */
