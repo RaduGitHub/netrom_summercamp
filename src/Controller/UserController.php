@@ -3,6 +3,7 @@
 namespace App\Controller;
 
 use App\Entity\User;
+use App\Form\ChangePassType;
 use App\Form\UserType;
 use App\Repository\UserRepository;
 use App\Services\MailerService;
@@ -46,7 +47,7 @@ class UserController extends AbstractController
                 $user,
                 $pass
             ));
-            $mailer->sendEmail($user, $pass);
+            $mailer->sendEmailNewAccount($user, $pass);
             //$user->setRole();
             $entityManager->persist($user);
             $entityManager->flush();
@@ -66,6 +67,32 @@ class UserController extends AbstractController
         return $this->render('user/show.html.twig', [
             'user' => $user,
         ]);
+    }
+
+    #[Route('/change/password', name:'change_password', methods:['GET', 'POST'])]
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher){
+        $user = new User();
+        $form = $this->createForm(ChangePassType::class, $user);
+        $form->handleRequest();
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $password = $form->get('newPassword')->getData();
+            $entityManager = $this->getDoctrine()->getManager();
+            $this->getUser()->setPassword($passwordHasher->hasPassword($this->getUser(), $password));
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            $this->addFlash('success', 'Password has changed');
+
+            return $this->redirectToRoute('home');
+        }
+
+        return $this->render('user/change_pass.html.twig', [
+            'user'=>$user,
+            'form'=>$form->createView(),
+        ]);
+
     }
 
     #[Route('/{id}/edit', name: 'user_edit', methods: ['GET', 'POST'])]

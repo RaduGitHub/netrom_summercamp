@@ -39,29 +39,34 @@ class ActivityService
         }
     }
 
-    public function iveBlockedSomebody(string $licensePlate)
+    /**
+     * @param string $licensePlate
+     * @return array|null
+     * @throws NonUniqueResultException
+     */
+    public function iveBlockedSomebody(string $licensePlate): ?array
     {
         $blocker = $this->activityRepo->findByBlocker($licensePlate);
 
-        if ($blocker instanceof Activity){
-            return $blocker->getBlockee();
+        if (count($blocker) != 0){
+            return $blocker;
         }
-        return '';
+        return null;
     }
 
     /**
      * @param string $licensePlate
-     * @return string|null
+     * @return array|null
      * @throws NonUniqueResultException
      */
-    public function whoBlockedMe(string $licensePlate): ?string
+    public function whoBlockedMe(string $licensePlate): ?array
     {
         $blocker = $this->activityRepo->findByBlockee($licensePlate);
 
-        if ($blocker instanceof Activity){
-            return $blocker->getBlocker();
+        if (count($blocker) != 0){
+            return $blocker;
         }
-        return '';
+        return null;
     }
 
     /**
@@ -106,48 +111,16 @@ class ActivityService
 
     public function checkLicensePlate(string $lp, int $uid = null): ?string
     {
-        if($uid == null)
-        {
+        if ($uid == null) {
             $licensePlate = $this->licensePlateRepo->LPExist($lp);
-        }
-        else
-        {
+        } else {
             $licensePlate = $this->licensePlateRepo->checkLP($lp, $uid);
         }
 
-        if($licensePlate != null)
-        {
+        if ($licensePlate != null) {
             return 'exist';
-        }
-        else
-        {
+        } else {
             return 'create';
         }
     }
-
-    /**
-     * @throws NonUniqueResultException
-     */
-//    public function checkBlockerLP(string $lp)
-//    {
-//        $licensePlate = $this->licensePlateRepo->LPExist($lp);
-//
-//        if($exist instanceof LicensePlate)
-//        {
-//            //continue
-//            return 'exists';
-//        }
-//        else
-//        {
-////            $this->licensePlateRepo->addLPNoUser($lp);
-//            return 'create';
-//        }
-//    }
-
-    // TO DO LATER ---- DROPDOWN RETRIEVE DATABASE
-//    public function getLicensePlates(int $userId): ?array
-//    {
-//        $licensePlates = $this->licensePlateRepo->findByUserId($userId);
-//
-//    }
 }

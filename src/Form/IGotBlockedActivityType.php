@@ -28,6 +28,7 @@ class IGotBlockedActivityType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Activity::class,
+            'carCount' => 0
         ]);
     }
 }

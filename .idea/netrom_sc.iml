@@ -90,6 +90,7 @@
       <excludeFolder url="file://$MODULE_DIR$/vendor/phpmailer/phpmailer" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/twitter/typeahead.js" />
       <excludeFolder url="file://$MODULE_DIR$/vendor/symfony/serializer" />
+      <excludeFolder url="file://$MODULE_DIR$/vendor/components/jquery" />
     </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />

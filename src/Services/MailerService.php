@@ -8,6 +8,7 @@ use App\Entity\User;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\Mime\Message;
 use Symfony\Component\Routing\Annotation\Route;
 
 class MailerService
@@ -29,7 +30,7 @@ class MailerService
      * @throws TransportExceptionInterface
      */
     #[Route('/email', name: 'email')]
-    public function sendEmail(User $user, string $pass)
+    public function sendEmailNewAccount(User $user, string $pass)
     {
         $mail = (new TemplatedEmail())
             ->from('whoblockedme@email.ro')
@@ -39,6 +40,37 @@ class MailerService
             ->context([
                 'mail' => $user->getEmail(),
                 'password' => $pass,
+            ]);
+        $this->mailer->send($mail);
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     */
+    #[Route('/email', name: 'emailblocker')]
+    public function sendEmailBlocker(string $blocker, User $blockee, string $lpBlockee, string $lpBlocker){
+        $mail = (new TemplatedEmail())
+            ->from('whoblockedme@email.ro')
+            ->to($blocker)
+            ->subject('You blocked someone')
+            ->htmlTemplate('mail_formats/you_blocked.html.twig')
+            ->context([
+                'lpBlocker' => $lpBlocker,
+                'mail' => $blockee->getEmail(),
+                'lpBlockee' => $lpBlockee,
+            ]);
+        $this->mailer->send($mail);
+    }
+    public function sendEmailBlockee(string $blockee, User $blocker, string $lpBlockee, string $lpBlocker){
+        $mail = (new TemplatedEmail())
+            ->from('whoblockedme@email.ro')
+            ->to($blockee)
+            ->subject('You blocked someone')
+            ->htmlTemplate('mail_formats/you_blocked.html.twig')
+            ->context([
+                'lpBlockee' => $lpBlockee,
+                'mail' => $blocker->getEmail(),
+                'lpBlocker' => $lpBlocker,
             ]);
         $this->mailer->send($mail);
     }

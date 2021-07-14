@@ -12,46 +12,45 @@
 {% endblock %}
 
 
-{% block javascripts %}
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/typeahead.jquery.js"></script>
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/corejs-typeahead/1.3.1/bloodhound.min.js"></script>
-    <script type="text/javascript" src="https://twitter.github.io/typeahead.js/releases/latest/typeahead.bundle.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function()
-        {
-            var licensePlates = new Bloodhound(
-            {
-                datumTokenizer: Bloodhound.tokenizers.whitespace,
-                queryTokenizer: Bloodhound.tokenizers.whitespace,
 
-                //remote
-                remote: {
-                    url: "{{ path('handle_search') }}/%QUERY%",
-                    wildcard: '%QUERY%',
-                    filter: function(licensePlates)
-                    {
-                        return $.map(licensePlates, function(lp){
-                            return {
-                                lp_name: lp.license_plate
-                            }
-                        })
-                    }
-                }
-            });
+{#{% block javascripts %}#}
+{#    {{ parent() }}#}
+{#    <script type="text/javascript">#}
+{#        $(document).ready(function()#}
+{#        {#}
+{#            var licensePlates = new Bloodhound(#}
+{#            {#}
+{#                datumTokenizer: Bloodhound.tokenizers.whitespace,#}
+{#                queryTokenizer: Bloodhound.tokenizers.whitespace,#}
 
-            licensePlates.initialize();
-            //i_blocked_activity_Blocker
-            $('#i_blocked_activity_Blocker').typeahead(
-                {
-                    hint:true
-                },
-                {
-                    name: 'licensePlates',
-                    source: licensePlates.ttAdapter(),
-                    display: 'lp_name'
-                }
-            )
+{#                //remote#}
+{#                remote: {#}
+{#                    url: "{{ path('handle_search') }}/%QUERY%",#}
+{#                    wildcard: '%QUERY%',#}
+{#                    filter: function(licensePlates)#}
+{#                    {#}
+{#                        return $.map(licensePlates, function(lp){#}
+{#                            return {#}
+{#                                lp_name: lp.license_plate#}
+{#                            }#}
+{#                        })#}
+{#                    }#}
+{#                }#}
+{#            });#}
 
-        })
-    </script>
-{% endblock %}
+{#            licensePlates.initialize();#}
+{#            //i_blocked_activity_Blocker#}
+{#            $('#i_blocked_activity_Blocker').typeahead(#}
+{#                {#}
+{#                    hint:true#}
+{#                },#}
+{#                {#}
+{#                    name: 'licensePlates',#}
+{#                    source: licensePlates.ttAdapter(),#}
+{#                    display: 'lp_name'#}
+{#                }#}
+{#            )#}
+
+{#        })#}
+{#    </script>#}
+{#{% endblock %}#}
