@@ -78,7 +78,7 @@ class ActivityController extends AbstractController
     public function iBlocked(Request $request, ActivityService $activityService, LicensePlateService $licensePlateService): Response
     {
         $activity = new Activity();
-        $lp_count = $licensePlateService->getLP($this->getUser()->getId());
+        $lp_count = $licensePlateService->getLPcount($this->getUser()->getId());
 
         if ($lp_count == 1) {
             $form = $this->createForm(IBlockedActivityType::class, $activity, [
@@ -108,7 +108,9 @@ class ActivityController extends AbstractController
                 $activity->setStatus(1);
                 //send mail
             }
-            if ($activityService->checkLicensePlate($activity->getBlocker(), $this->getUser()->getId()) == 'create') {
+            if ($activity->getblocker() == null) {
+                $activity->setBlocker($licensePlateService->getLP($this->getUser()->getId()));
+            } elseif ($activityService->checkLicensePlate($activity->getBlocker(), $this->getUser()->getId()) == 'create') {
                 $licensePlate = new LicensePlate();
                 $licensePlate->setLicensePlate($activity->getBlocker());
                 $licensePlate->setUserId($this->getUser()->getId());
@@ -137,7 +139,7 @@ class ActivityController extends AbstractController
     {
         $activity = new Activity();
 
-        $lp_count = $licensePlateService->getLP($this->getUser()->getId());
+        $lp_count = $licensePlateService->getLPcount($this->getUser()->getId());
         if ($lp_count == 1) {
             $form = $this->createForm(IGotBlockedActivityType::class, $activity, [
                 'carCount' => 1
@@ -155,13 +157,17 @@ class ActivityController extends AbstractController
 
         //blockee = me , blocker = you
         if ($form->isSubmitted() && $form->isValid()) {
-            $lpBlockee = $licensePlateService->cleanLP($activity->getBlockee());
             $lpBlocker = $licensePlateService->cleanLP($activity->getBlocker());
-
-            //rewrite this later
             $activity->setBlocker($lpBlocker);
-            $activity->setBlockee($lpBlockee);
 
+            if ($activity->getBlockee() == null) {
+                $activity->setBlockee($licensePlateService->getLP($this->getUser()->getId()));
+                $lpBlockee = $licensePlateService->cleanLP($activity->getBlockee());
+                $activity->setBlockee($lpBlockee);
+            } else {
+                $lpBlockee = $licensePlateService->cleanLP($activity->getBlockee());
+                $activity->setBlockee($lpBlockee);
+            }
             if ($activityService->checkLicensePlate($lpBlockee, $this->getUser()->getId()) == 'create') {
                 $licensePlate = new LicensePlate();
                 $licensePlate->setLicensePlate($lpBlockee);
@@ -170,6 +176,7 @@ class ActivityController extends AbstractController
                 $entityManager->persist($licensePlate);
                 $entityManager->flush();
             }
+
             if ($activityService->checkLicensePlate($lpBlocker) == 'create') {
                 $licensePlate = new LicensePlate();
                 $licensePlate->setLicensePlate($lpBlocker);

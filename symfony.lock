@@ -1,4 +1,7 @@
 {
+    "components/font-awesome": {
+        "version": "5.15.3"
+    },
     "components/jquery": {
         "version": "3.5.1"
     },
@@ -87,6 +90,9 @@
     },
     "egulias/email-validator": {
         "version": "3.1.1"
+    },
+    "fortawesome/font-awesome": {
+        "version": "5.15.3"
     },
     "friendsofphp/proxy-manager-lts": {
         "version": "v1.0.5"

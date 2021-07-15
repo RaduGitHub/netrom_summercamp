@@ -70,15 +70,16 @@ class UserController extends AbstractController
     }
 
     #[Route('/change/password', name:'change_password', methods:['GET', 'POST'])]
-    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher){
-        $user = new User();
+    public function changePassword(Request $request, UserPasswordHasherInterface $passwordHasher)
+    {
+        $user = $this->getUser();
         $form = $this->createForm(ChangePassType::class, $user);
-        $form->handleRequest();
+        $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $password = $form->get('newPassword')->getData();
+            $password = $form->get('password')->getData();
             $entityManager = $this->getDoctrine()->getManager();
-            $this->getUser()->setPassword($passwordHasher->hasPassword($this->getUser(), $password));
+            $user->setPassword($passwordHasher->hashPassword($user, $password));
 
             $entityManager->persist($user);
             $entityManager->flush();
@@ -89,7 +90,7 @@ class UserController extends AbstractController
         }
 
         return $this->render('user/change_pass.html.twig', [
-            'user'=>$user,
+//            'user'=>$user,
             'form'=>$form->createView(),
         ]);
 

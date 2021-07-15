@@ -1,32 +1,34 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}LicensePlate index{% endblock %}
+{% block title %}License Plates{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
 
 {% block body %}
     {{ parent() }}
-
-    <h1>LicensePlate index</h1>
-
+    <div class="text-center">
+        <h1>Your License Plates / Cars</h1>
+    </div>
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>License_plate</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for license_plate in license_plates %}
-{#            {% if license_plate.userId == app.user.id  %}#}
             <tr>
-                <td>{{ license_plate.id }}</td>
                 <td>{{ license_plate.license_plate }}</td>
                 <td>
-                    <a href="{{ path('license_plate_show', {'id': license_plate.id}) }}">show</a>
-                    <a href="{{ path('license_plate_edit', {'id': license_plate.id}) }}">edit</a>
+                    <a href="{{ path('license_plate_delete', {'id': license_plate.id}) }}">
+                        Delete
+                    </a>
+                    <a href="{{ path('license_plate_edit', {'id': license_plate.id}) }}">Edit</a>
                 </td>
             </tr>
-{#            {% endif %}#}
         {% else %}
             <tr>
                 <td colspan="3">no records found</td>
@@ -36,4 +38,7 @@
     </table>
 
     <a href="{{ path('license_plate_new') }}">Create new</a>
+{% endblock %}
+{% block javascripts %}
+    {{ parent() }}
 {% endblock %}

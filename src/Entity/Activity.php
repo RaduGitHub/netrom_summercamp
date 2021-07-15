@@ -40,7 +40,7 @@ class Activity
     /**
      * @return string
      */
-    public function getBlocker(): string
+    public function getBlocker(): ?string
     {
         return $this->blocker;
     }
@@ -57,7 +57,7 @@ class Activity
     /**
      * @return string
      */
-    public function getBlockee(): string
+    public function getBlockee(): ?string
     {
         return $this->blockee;
     }

@@ -20,9 +20,14 @@ class LicensePlateService
         $this->licensePlateRepo = $em->getRepository(LicensePlate::class);
     }
 
-    public function getLP($uid): ?int
+    public function getLPcount($uid): ?int
     {
         return count($this->licensePlateRepo->findAllForUser($uid));
+    }
+
+    public function getLP($uid)
+    {
+        return $this->licensePlateRepo->findLp($uid);
     }
 
     public function cleanLP($lp)
