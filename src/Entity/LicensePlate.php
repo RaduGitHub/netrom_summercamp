@@ -29,7 +29,7 @@ class LicensePlate
      * @ORM\JoinColumn(nullable=true)
      * @ORM\Column(type="integer")
      */
-    private int $user_id;
+    private ?int $user_id;
 
     public function getLicensePlate(): string
     {
@@ -58,5 +58,9 @@ class LicensePlate
         $this->user_id = $user_id;
 
         return $this;
+    }
+
+    public function __toString(): string{
+        return $this->license_plate;
     }
 }

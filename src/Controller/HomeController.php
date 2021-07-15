@@ -15,6 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Normalizer\ObjectNormalizer;
 use Symfony\Component\Serializer\Serializer;
+use Symfony\Component\Serializer\SerializerInterface;
 
 class HomeController extends AbstractController
 {
@@ -30,10 +31,10 @@ class HomeController extends AbstractController
      *
      * @Route("handleSearch/{QUERY?}", name="handle_search", methods={"POST", "GET"})
      */
-    public function handleSearchRequest(Request $request, $QUERY): JsonResponse
+    public function handleSearchRequest(Request $request, $QUERY, SerializerInterface $serializer): JsonResponse
     {
         $em = $this->getDoctrine()->getManager();
-        echo 'Am ajuns aici';
+//        echo 'Am ajuns aici';
         if($QUERY)
         {
             $data = $em->getRepository(LicensePlate::class)->findByLP($QUERY);
@@ -43,15 +44,15 @@ class HomeController extends AbstractController
             $data = $em->getRepository(LicensePlate::class)->findAllForUser($this->getUser()->getId());
         }
 
-        $normalizers = [
-            new ObjectNormalizer()
-        ];
+//        $normalizers = [
+//            new ObjectNormalizer()
+//        ];
+//
+//        $encoders = [
+//            new JsonEncoder()
+//        ];
 
-        $encoders = [
-            new JsonEncoder()
-        ];
-
-        $serializer = new Serializer($normalizers, $encoders);
+//        $serializer = new Serializer($normalizers, $encoders);
 
         $data = $serializer->serialize($data, 'json');
 

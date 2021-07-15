@@ -97,6 +97,15 @@
     "nikic/php-parser": {
         "version": "v4.10.5"
     },
+    "phpdocumentor/reflection-common": {
+        "version": "2.2.0"
+    },
+    "phpdocumentor/reflection-docblock": {
+        "version": "5.2.2"
+    },
+    "phpdocumentor/type-resolver": {
+        "version": "1.4.0"
+    },
     "phpmailer/phpmailer": {
         "version": "v6.5.0"
     },
@@ -324,6 +333,9 @@
     "symfony/serializer": {
         "version": "v5.3.2"
     },
+    "symfony/serializer-pack": {
+        "version": "v1.0.4"
+    },
     "symfony/service-contracts": {
         "version": "v2.4.0"
     },
@@ -391,5 +403,8 @@
     },
     "twitter/typeahead.js": {
         "version": "v0.11.1"
+    },
+    "webmozart/assert": {
+        "version": "1.10.0"
     }
 }

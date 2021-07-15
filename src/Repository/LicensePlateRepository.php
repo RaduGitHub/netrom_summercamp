@@ -35,7 +35,7 @@ class LicensePlateRepository extends ServiceEntityRepository
     public function findByLP($value)
     {
         return $this->createQueryBuilder('c')
-            ->andWhere('c.name like :query')
+            ->andWhere('c.license_plate like :query')
             ->setParameter('query', "%". $value ."%")
             ->getQuery()
             ->getResult();

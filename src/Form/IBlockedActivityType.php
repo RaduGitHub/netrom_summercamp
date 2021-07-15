@@ -7,6 +7,7 @@ namespace App\Form;
 use App\Entity\Activity;
 use App\Entity\LicensePlate;
 use App\Entity\User;
+use App\Repository\LicensePlateRepository;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -22,42 +23,42 @@ class IBlockedActivityType extends AbstractType
 
     private $security;
 
-    public function __construct(Security $security){
+    public function __construct(Security $security)
+    {
         $this->security = $security;
     }
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-//        if($options['carCount'] == 2)
-//        {
-//            $builder->add('blocker', EntityType::class, [
-//                'class'=>LicensePlate::class,
-//                'query_builder' => function(EntityRepository $et){
-//                    return $et->createQueryBuilder('l')
-//                        ->andWhere('l.user_id = :var')
-//                        ->setParameter('var', $this->security->getUser()->getId());
-//                },
-//                'choice_label'=>'license_plate',
-//                'disabled'=>true,]);
-//        }else{
-//            $builder->add('blocker', EntityType::class, [
-//                'class'=>LicensePlate::class,
-//                'query_builder' => function(EntityRepository $et){
-//                    return $et->createQueryBuilder('l')
-//                        ->andWhere('l.user_id = :var')
-//                        ->setParameter('var', $this->security->getUser()->getId());
-//                },
-//                'choice_label'=>'license_plate',
-//                ]);
-//        }
+        if ($options['carCount'] == 1) {
+            $builder->add('blocker', EntityType::class, [
+                'class' => LicensePlate::class,
+                'query_builder' => function (EntityRepository $et) {
+                    return $et->createQueryBuilder('l')
+                        ->andWhere('l.user_id = :var')
+                        ->setParameter('var', $this->security->getUser()->getId());
+                },
+                'choice_label' => 'license_plate',
+                'disabled' => true,]);
+        } else {
+            $builder->add('blocker', EntityType::class, [
+                'class' => LicensePlate::class,
+                'query_builder' => function (LicensePlateRepository $et) {
+                    return $et->createQueryBuilder('l')
+                        ->andWhere('l.user_id = :var')
+                        ->setParameter('var', $this->security->getUser()->getId());
+                },
+                'choice_label' => 'license_plate',
+            ]);
+        }
 
         $builder
 //            ->add('Email')
 //            ->add('Password')
 //                ->setAction($this->generateUrl('handler_search'))
-            ->add('Blocker')
+            //->add('blocker')
             ->add('blockee')
-        ;
+            ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
