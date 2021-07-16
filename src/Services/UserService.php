@@ -28,7 +28,7 @@ class UserService
 
     public function getEmailByUid($uid): ?string
     {
-        return $this->userRepo->getEmailByUid($uid);
+        return $this->userRepo->findByUid($uid);
     }
 
 

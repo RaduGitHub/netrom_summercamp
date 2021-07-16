@@ -5,8 +5,10 @@ namespace App\Controller;
 
 
 use App\Entity\LicensePlate;
+use App\Entity\User;
 use App\Form\IGotBlockedActivityType;
 use App\Form\UserType;
+use App\Repository\UserRepository;
 use App\Services\ActivityService;
 use App\Services\LicensePlateService;
 use App\Services\MailerService;
@@ -75,7 +77,8 @@ class ActivityController extends AbstractController
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     #[Route('/iblocked', name: 'iblocked')]
-    public function iBlocked(Request $request, ActivityService $activityService, LicensePlateService $licensePlateService): Response
+    public function iBlocked(Request $request, ActivityService $activityService, LicensePlateService $licensePlateService,
+                             MailerService $mailer, UserRepository $userRepository): Response
     {
         $activity = new Activity();
         $lp_count = $licensePlateService->getLPcount($this->getUser()->getId());
@@ -92,7 +95,6 @@ class ActivityController extends AbstractController
             $this->addFlash('notice', 'You must add a license plate first');
             return $this->redirectToRoute('license_plate_new');
         }
-//        dd($form->getData());
         $form->handleRequest($request);
 
         //blockee = you , blocker = me
@@ -104,9 +106,16 @@ class ActivityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($licensePlate);
                 $entityManager->flush();
+                $this->addFlash("No user has that car so no email was sent.");
             } else {
                 $activity->setStatus(1);
-                //send mail
+                $blockees = $licensePlateService->getUid($activity->getBlockee());
+                foreach ($blockees as $blockee) {
+                    $blockeeUser = $userRepository->findOneBy(['id' => $blockee['user_id']]);
+                    $mailer->sendEmailBlockee($blockeeUser, $this->getUser(),
+                        $activity->getBlockee(), $activity->getBlocker());
+                }
+                $this->addFlash("Mail was sent.");
             }
             if ($activity->getblocker() == null) {
                 $activity->setBlocker($licensePlateService->getLP($this->getUser()->getId()));
@@ -135,7 +144,8 @@ class ActivityController extends AbstractController
      * @throws \Doctrine\ORM\NonUniqueResultException
      */
     #[Route('/iGotBlocked', name: 'iGotBlocked')]
-    public function iGotBlocked(Request $request, ActivityService $activityService, LicensePlateService $licensePlateService, MailerService $mailer, UserService $userService): Response
+    public function iGotBlocked(Request $request, ActivityService $activityService, LicensePlateService $licensePlateService,
+                                MailerService $mailer, UserRepository $userRepository): Response
     {
         $activity = new Activity();
 
@@ -183,9 +193,16 @@ class ActivityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($licensePlate);
                 $entityManager->flush();
+                $this->addFlash("No user has that car so no email was sent.");
             } else {
                 $activity->setStatus(1);
-                //$mailer->sendEmailBlocker();
+                $blockers = $licensePlateService->getUid($activity->getBlocker());
+                foreach ($blockers as $blocker) {
+                    $blockerUser = $userRepository->findOneBy(['id' => $blocker['user_id']]);
+                    $mailer->sendEmailBlocker($blockerUser, $this->getUser(),
+                        $activity->getBlockee(), $activity->getBlocker());
+                }
+                $this->addFlash("Mail was sent.");
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($activity);

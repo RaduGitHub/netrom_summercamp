@@ -41,16 +41,15 @@ class LicensePlateController extends AbstractController
             $licensePlate->setLicensePlate($licensePlateService->cleanLP($licensePlate->getLicensePlate()));
             $entityManager = $this->getDoctrine()->getManager();
 
-            //$licensePlateRepository->findOneBy(['license_plate'=>$licensePlate->getLicensePlate()]);
+            $licensePlateRepository->findOneBy(['license_plate' => $licensePlate->getLicensePlate()]);
 
-
-            //should be ok annie
             $blockers = $activityService->whoBlockedMe($licensePlate->getLicensePlate());
-            //dd($blockers);
-            if($blockers != null){
-                foreach($blockers as $blockerAc){
+//            dd($blockers);
+            if ($blockers != null) {
+                $licensePlate = $licensePlateRepository->findOneBy(['license_plate' => $licensePlate->getLicensePlate()]);
+                foreach ($blockers as $blockerAc) {
                     $blocker = $licensePlateRepository->findOneBy(['license_plate' => $blockerAc->getBlocker()]);
-                    $this->addFlash('warning', 'Your car has been blocked by'.$blocker->getLicensePlate());
+                    $this->addFlash('warning', 'Your car has been blocked by ' . $blocker->getLicensePlate());
 
                     $blockerAc->setStatus(1);
                     $entityManager->persist($blockerAc);
@@ -59,17 +58,17 @@ class LicensePlateController extends AbstractController
             }
 
             $blockees = $activityService->iveBlockedSomebody($licensePlate->getLicensePlate());
-            if($blockees != null){
-                foreach($blockees as $blockeeAc){
-                    $blockee = $licensePlateRepository->findOneBy(['license_plate'=>$blockeeAc->getBlockee()]);
-                    $this->addFlash('warning', 'Your car is blocking'.$blockee->getLicensePlate());
+            if ($blockees != null) {
+                $licensePlate = $licensePlateRepository->findOneBy(['license_plate' => $licensePlate->getLicensePlate()]);
+                foreach ($blockees as $blockeeAc) {
+                    $blockee = $licensePlateRepository->findOneBy(['license_plate' => $blockeeAc->getBlockee()]);
+                    $this->addFlash('warning', 'Your car is blocking ' . $blockee->getLicensePlate());
 
-                    $blockerAc->setStatus(1);
+                    $blockeeAc->setStatus(1);
                     $entityManager->persist($blockeeAc);
                     $entityManager->flush();
                 }
             }
-
             $licensePlate->setUserId($this->getUser()->getId());
             $entityManager->persist($licensePlate);
             $entityManager->flush();
@@ -109,7 +108,7 @@ class LicensePlateController extends AbstractController
             $blockers = $activityService->whoBlockedMe($newLicensePlate);
             $blockees = $activityService->iveBlockedSomebody($newLicensePlate);
 
-            if($blockees != null || $blockers != null){
+            if ($blockees != null || $blockers != null) {
                 $this->addFlash('danger', 'License plate can\'t be changed. There is an active report');
                 return $this->redirectToRoute('license_plate_index');
             }
@@ -134,13 +133,13 @@ class LicensePlateController extends AbstractController
         $blockers = $activityService->whoBlockedMe($lp);
         $blockees = $activityService->iveBlockedSomebody($lp);
 
-        if($blockees != null || $blockers != null){
+        if ($blockees != null || $blockers != null) {
             $this->addFlash('danger', 'License plate can\'t be deleted. There is an active report');
             return $this->redirectToRoute('license_plate_index');
         }
 
-        if ($this->isCsrfTokenValid('delete'.$licensePlate->getId(), $request->request->get('_token'))) {
-            $this>$this->addFlash('success', 'LicensePlate'. $licensePlate->getLicensePlate() .'deleted');
+        if ($this->isCsrfTokenValid('delete' . $licensePlate->getId(), $request->request->get('_token'))) {
+            $this > $this->addFlash('success', 'LicensePlate' . $licensePlate->getLicensePlate() . 'deleted');
 
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->remove($licensePlate);

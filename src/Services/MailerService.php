@@ -48,10 +48,10 @@ class MailerService
      * @throws TransportExceptionInterface
      */
     #[Route('/email', name: 'emailblocker')]
-    public function sendEmailBlocker(string $blocker, User $blockee, string $lpBlockee, string $lpBlocker){
+    public function sendEmailBlocker(User $blocker, User $blockee, string $lpBlockee, string $lpBlocker){
         $mail = (new TemplatedEmail())
             ->from('whoblockedme@email.ro')
-            ->to($blocker)
+            ->to($blocker->getEmail())
             ->subject('You blocked someone')
             ->htmlTemplate('mail_formats/you_blocked.html.twig')
             ->context([
@@ -61,12 +61,12 @@ class MailerService
             ]);
         $this->mailer->send($mail);
     }
-    public function sendEmailBlockee(string $blockee, User $blocker, string $lpBlockee, string $lpBlocker){
+    public function sendEmailBlockee(User $blockee, User $blocker, string $lpBlockee, string $lpBlocker){
         $mail = (new TemplatedEmail())
             ->from('whoblockedme@email.ro')
-            ->to($blockee)
-            ->subject('You blocked someone')
-            ->htmlTemplate('mail_formats/you_blocked.html.twig')
+            ->to($blockee->getEmail())
+            ->subject('You got blocked by someone')
+            ->htmlTemplate('mail_formats/you_got_blocked.html.twig')
             ->context([
                 'lpBlockee' => $lpBlockee,
                 'mail' => $blocker->getEmail(),

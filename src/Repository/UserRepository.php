@@ -19,9 +19,14 @@ class UserRepository extends ServiceEntityRepository
         parent::__construct($registry, User::class);
     }
 
-    public function getEmailByUid(string $lp): ?string
+    public function findOneById(int $value)
     {
-
+//        dd($uid);
+        $this->createQueryBuilder('u')
+            ->andWhere('u.id = :val')
+            ->setParameter('val', $value)
+            ->getQuery()
+            ->getArrayResult();
     }
 
     // /**

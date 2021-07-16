@@ -53,6 +53,7 @@ class LicensePlateRepository extends ServiceEntityRepository
     public function getUidForLP($value): array
     {
         return $this->createQueryBuilder('l')
+            ->select('l.user_id')
             ->andWhere('l.license_plate = :var')
             ->setParameter('var', $value)
             ->getQuery()
