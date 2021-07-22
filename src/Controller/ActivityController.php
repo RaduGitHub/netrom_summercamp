@@ -108,7 +108,7 @@ class ActivityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($licensePlate);
                 $entityManager->flush();
-                $this->addFlash("No user has that car so no email was sent.");
+                $this->addFlash('notify', "No user has that car so no email was sent.");
             } else {
                 $activity->setStatus(1);
                 $blockees = $licensePlateService->getUid($activity->getBlockee());
@@ -117,7 +117,7 @@ class ActivityController extends AbstractController
                     $mailer->sendEmailBlockee($blockeeUser, $this->getUser(),
                         $activity->getBlockee(), $activity->getBlocker());
                 }
-                $this->addFlash("Mail was sent.");
+                $this->addFlash('notify', "Mail was sent.");
             }
             if ($activity->getblocker() == null) {
                 $activity->setBlocker($licensePlateService->getLP($this->getUser()->getId()));
@@ -195,7 +195,7 @@ class ActivityController extends AbstractController
                 $entityManager = $this->getDoctrine()->getManager();
                 $entityManager->persist($licensePlate);
                 $entityManager->flush();
-                $this->addFlash("No user has that car so no email was sent.");
+                $this->addFlash('notify', "No user has that car so no email was sent.");
             } else {
                 $activity->setStatus(1);
                 $blockers = $licensePlateService->getUid($activity->getBlocker());
@@ -204,7 +204,7 @@ class ActivityController extends AbstractController
                     $mailer->sendEmailBlocker($blockerUser, $this->getUser(),
                         $activity->getBlockee(), $activity->getBlocker());
                 }
-                $this->addFlash("Mail was sent.");
+                $this->addFlash('notify',"Mail was sent.");
             }
             $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($activity);

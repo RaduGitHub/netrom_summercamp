@@ -34,11 +34,14 @@ class LicensePlateService
     {
         $licensePlates = $this->licensePlateRepo->findBy(['user_id' => $uid]);
 
-        foreach ($licensePlates as $licensePlate){
-            $licensePlate = $licensePlate->getLicensePlate();
+        $lp = array();
+        foreach ($licensePlates as $licensePlate) {
+            if ($licensePlate->getUserId() != null) {
+                array_push($lp, $licensePlate->getLicensePlate());
+            }
         }
 
-        return $licensePlates;
+        return $lp;
     }
 
     public function cleanLP($lp)
