@@ -30,6 +30,17 @@ class LicensePlateService
         return $this->licensePlateRepo->findLp($uid);
     }
 
+    public function getAllLP($uid): ?array
+    {
+        $licensePlates = $this->licensePlateRepo->findBy(['user_id' => $uid]);
+
+        foreach ($licensePlates as $licensePlate){
+            $licensePlate = $licensePlate->getLicensePlate();
+        }
+
+        return $licensePlates;
+    }
+
     public function cleanLP($lp)
     {
         return strtoupper(preg_replace('/[^A-Za-z0-9]/', '', $lp));

@@ -1,0 +1,44 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Activity{% endblock %}
+
+{% block stylesheets %}
+    {{ parent() }}
+{% endblock %}
+
+{% block body %}
+    {{ parent() }}
+    <div class="text-center">
+        <h1>Your blockings</h1>
+    </div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Blocker</th>
+            <th>Blockee</th>
+            <th>Status</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for activity in activity %}
+            <tr>
+                <td>{{ activity.blocker }}</td>
+                <td>{{ activity.blockee }}</td>
+                <td>{{ activity.status }}</td>
+{#                <td>#}
+{#                    <a href="{{ path('license_plate_delete', {'id': license_plate.id}) }}">#}
+{#                        Delete#}
+{#                    </a>#}
+{#                    <a href="{{ path('license_plate_edit', {'id': license_plate.id}) }}">Edit</a>#}
+{#                </td>#}
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="3">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{#    <a href="{{ path('license_plate_new') }}">Create new</a>#}
+{% endblock %}

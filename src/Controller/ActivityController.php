@@ -24,15 +24,17 @@ use Symfony\Component\Routing\Annotation\Route;
 class ActivityController extends AbstractController
 {
 
-    #[Route('/', name: 'activity')]
-    public function index(): Response
+    #[Route('/index', name: 'activity/index')]
+    public function index(ActivityService $activityService): Response
     {
-        return $this->json([
-            'message' => 'Welcome to your new controller!',
-            'path' => 'src/Controller/HomeController.php',
-        ]);
+//        return $this->json([
+//            'message' => 'Welcome to your new controller!',
+//            'path' => 'src/Controller/HomeController.php',
+//        ]);
 
-        return $this->render('home/home.html.twig');
+        return $this->render('activity/index.html.twig', [
+            'activity' => $activityService->getActivityUser($this->getUser()->getId()),
+        ]);
 
     }
 

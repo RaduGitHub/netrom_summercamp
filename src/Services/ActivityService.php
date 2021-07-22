@@ -16,27 +16,38 @@ class ActivityService
      */
     protected $activityRepo;
     protected $licensePlateRepo;
+    protected $licensePlateService;
     private EntityManagerInterface $em;
 
     /**
      * @param EntityManagerInterface $em
      */
-    public function __construct(EntityManagerInterface $em)
+    public function __construct(EntityManagerInterface $em, LicensePlateService $licensePlateService)
     {
         $this->em = $em;
         $this->activityRepo = $em->getRepository(Activity::class);
         $this->licensePlateRepo = $em->getRepository(LicensePlate::class);
+        $this->licensePlateService = $licensePlateService;
+
     }
 
-    public function addBlock(string $licensePlateBlockee, string $licensePlateBlocker)
-    {
-        $status = $this->activityRepo->addActivityBlocker($licensePlateBlockee, $licensePlateBlocker);
+//    public function addBlock(string $licensePlateBlockee, string $licensePlateBlocker)
+//    {
+//        $status = $this->activityRepo->addActivityBlocker($licensePlateBlockee, $licensePlateBlocker);
+//
+//        if($status == 'Added'){
+//            //do something
+//        }else{
+//            //throw error
+//        }
+//    }
 
-        if($status == 'Added'){
-            //do something
-        }else{
-            //throw error
-        }
+    //ModifyDis ??
+    public function getActivityUser($uid): ?array
+    {
+        $blocker = $this->activityRepo->findBy(['blocker' => $this->licensePlateService->getAllLP($uid)]);
+        $blockee = $this->activityRepo->findBy(['blockee' => $this->licensePlateService->getAllLP($uid)]);
+        return  array_merge($blocker, $blockee);
     }
 
     /**
@@ -48,7 +59,7 @@ class ActivityService
     {
         $blocker = $this->activityRepo->findByBlocker($licensePlate);
 
-        if (count($blocker) != 0){
+        if (count($blocker) != 0) {
             return $blocker;
         }
         return null;
@@ -63,7 +74,7 @@ class ActivityService
     {
         $blocker = $this->activityRepo->findByBlockee($licensePlate);
 
-        if (count($blocker) != 0){
+        if (count($blocker) != 0) {
             return $blocker;
         }
         return null;
@@ -92,18 +103,13 @@ class ActivityService
         $blockee = $this->activityRepo->findByBlockee($lp);
         $blocker = $this->activityRepo->findByBlocker($lp);
 
-        if($blockee == null and $blocker == null)
-        {
+        if ($blockee == null and $blocker == null) {
             //nothing
             return null;
-        }
-        elseif ($blockee == 'exist')
-        {
+        } elseif ($blockee == 'exist') {
             //send mail
             return 'blockee';
-        }
-        elseif ($blocker == 'exist')
-        {
+        } elseif ($blocker == 'exist') {
             //send mail
             return 'blocker';
         }
